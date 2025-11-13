@@ -21,25 +21,25 @@ $cartCount = $cartModel->getCount();
 <body>
     <nav class="navbar">
         <div class="navbar-container">
-            <a href="/shop_vinamilk/" class="navbar-logo">
+            <a href="index.php" class="navbar-logo">
                 <span class="logo-text">Vinamilk</span>
             </a>
             <ul class="navbar-menu">
                 <li class="navbar-item">
-                    <a href="/shop_vinamilk/" class="navbar-link">Danh mục sản phẩm</a>
+                    <a href="index.php" class="navbar-link">Danh mục sản phẩm</a>
                 </li>
                 <li class="navbar-item">
-                    <a href="/shop_vinamilk/index.php?controller=cart&action=view" class="navbar-link">
-                        Giỏ hàng
-                        <?php if ($cartCount > 0): ?>
-                            <span class="cart-badge"><?php echo $cartCount; ?></span>
-                        <?php endif; ?>
+                    <a href="index.php?controller=cart&action=view" class="navbar-link"></a>
+                    Giỏ hàng
+                    <?php if ($cartCount > 0): ?>
+                        <span class="cart-badge"><?php echo $cartCount; ?></span>
+                    <?php endif; ?>
                     </a>
                 </li>
                 <li class="navbar-item">
-                    <a href="/shop_vinamilk/index.php?controller=product&action=admin" class="navbar-link">Quản lý sản phẩm</a>
+                    <a href="index.php?controller=product&action=admin" class="navbar-link">Quản lý sản phẩm</a>
                 </li>
             </ul>
         </div>
     </nav>
-    <main class="main-content"></main>
+    <main class="main-content">

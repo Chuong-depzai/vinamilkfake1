@@ -53,7 +53,7 @@
                 <?php if (isset($product) && !empty($product['image'])): ?>
                     <div class="current-image-wrapper">
                         <p class="current-image-label">Ảnh hiện tại:</p>
-                        <img src="/shop_vinamilk/uploads/<?php echo htmlspecialchars($product['image']); ?>"
+                        <img src="/uploads/<?php echo htmlspecialchars($product['image']); ?>"
                             alt="Current"
                             class="current-image">
                     </div>
@@ -87,7 +87,7 @@
                 <button type="submit" class="btn-submit">
                     <?php echo isset($product) ? 'Cập nhật' : 'Thêm sản phẩm'; ?>
                 </button>
-                <a href="/shop_vinamilk/index.php?controller=product&action=admin" class="btn-cancel">Hủy</a>
+                <a href="/index.php?controller=product&action=admin" class="btn-cancel">Hủy</a>
             </div>
         </form>
     </div>

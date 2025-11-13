@@ -4,7 +4,7 @@
     <?php if (empty($cartItems)): ?>
         <div class="empty-cart">
             <p class="empty-cart-text">Giỏ hàng của bạn đang trống.</p>
-            <a href="/shop_vinamilk/" class="btn-primary">Tiếp tục mua sắm</a>
+            <a href="index.php" class="btn-primary">Tiếp tục mua sắm</a>
         </div>
     <?php else: ?>
         <div class="cart-container">
@@ -13,7 +13,7 @@
                     <div class="cart-item">
                         <div class="cart-item-image-wrapper">
                             <?php
-                            $imagePath = "/shop_vinamilk/uploads/" . htmlspecialchars($item['image']);
+                            $imagePath = "uploads/" . htmlspecialchars($item['image']);
                             if (file_exists(__DIR__ . '/../uploads/' . $item['image'])):
                             ?>
                                 <img src="<?php echo $imagePath; ?>" alt="<?php echo htmlspecialchars($item['name']); ?>" class="cart-item-image">
@@ -31,7 +31,7 @@
                         </div>
 
                         <div class="cart-item-quantity">
-                            <form method="POST" action="/shop_vinamilk/index.php?controller=cart&action=update" class="cart-quantity-form">
+                            <form method="POST" action="index.php?controller=cart&action=update" class="cart-quantity-form">
                                 <input type="hidden" name="product_id" value="<?php echo $item['id']; ?>">
                                 <label for="quantity_<?php echo $item['id']; ?>" class="quantity-label-cart">Số lượng:</label>
                                 <input type="number" id="quantity_<?php echo $item['id']; ?>" name="quantity" value="<?php echo $item['quantity']; ?>" min="1" max="100" class="cart-quantity-input">
@@ -45,7 +45,7 @@
                         </div>
 
                         <div class="cart-item-actions">
-                            <a href="/shop_vinamilk/index.php?controller=cart&action=remove&id=<?php echo $item['id']; ?>"
+                            <a href="/index.php?controller=cart&action=remove&id=<?php echo $item['id']; ?>"
                                 class="btn-remove-item"
                                 onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">
                                 Xóa
@@ -70,13 +70,13 @@
                     <span class="cart-total-value"><?php echo number_format($total, 0, ',', '.'); ?> VNĐ</span>
                 </div>
 
-                <form method="POST" action="/shop_vinamilk/index.php?controller=cart&action=checkout" class="cart-checkout-form">
+                <form method="POST" action="/index.php?controller=cart&action=checkout" class="cart-checkout-form">
                     <button type="submit" class="btn-checkout">Thanh toán</button>
                 </form>
 
-                <a href="/shop_vinamilk/" class="btn-continue-shopping">Tiếp tục mua sắm</a>
+                <a href="/" class="btn-continue-shopping">Tiếp tục mua sắm</a>
 
-                <a href="/shop_vinamilk/index.php?controller=cart&action=clear"
+                <a href="index.php?controller=cart&action=clear"
                     class="btn-clear-cart"
                     onclick="return confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?')">
                     Xóa giỏ hàng

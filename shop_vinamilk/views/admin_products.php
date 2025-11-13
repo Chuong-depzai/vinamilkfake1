@@ -1,7 +1,7 @@
 <div class="page-container">
     <div class="admin-header">
         <h1 class="page-title">Quản lý sản phẩm</h1>
-        <a href="/shop_vinamilk/index.php?controller=product&action=create" class="btn-add-product">+ Thêm sản phẩm mới</a>
+        <a href="index.php?controller=product&action=create" class="btn-add-product">+ Thêm sản phẩm mới</a>
     </div>
 
     <?php if (empty($products)): ?>
@@ -28,7 +28,7 @@
                             <td class="admin-table-cell"><?php echo $product['id']; ?></td>
                             <td class="admin-table-cell">
                                 <?php
-                                $imagePath = "/shop_vinamilk/uploads/" . htmlspecialchars($product['image']);
+                                $imagePath = "uploads/" . htmlspecialchars($product['image']);
                                 if (file_exists(__DIR__ . '/../uploads/' . $product['image'])):
                                 ?>
                                     <img src="<?php echo $imagePath; ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" class="admin-product-image">
@@ -42,8 +42,8 @@
                             <td class="admin-table-cell"><?php echo htmlspecialchars($product['packaging']); ?></td>
                             <td class="admin-table-cell">
                                 <div class="admin-action-buttons">
-                                    <a href="/shop_vinamilk/index.php?controller=product&action=edit&id=<?php echo $product['id']; ?>" class="btn-edit">Sửa</a>
-                                    <a href="/shop_vinamilk/index.php?controller=product&action=delete&id=<?php echo $product['id']; ?>"
+                                    <a href="index.php?controller=product&action=edit&id=<?php echo $product['id']; ?>" class="btn-edit">Sửa</a>
+                                    <a href="index.php?controller=product&action=delete&id=<?php echo $product['id']; ?>"
                                         class="btn-delete"
                                         onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">
                                         Xóa

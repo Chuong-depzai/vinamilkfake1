@@ -52,6 +52,20 @@ body {
 
 .navbar-item {
     position: relative;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    margin: 0 auto;
+    /* Center the item */
+    list-style: none;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
 }
 
 .navbar-link {
@@ -64,6 +78,7 @@ body {
     transition: background-color 0.3s ease;
     display: inline-block;
     position: relative;
+    cursor: pointer;
 }
 
 .navbar-link:hover {

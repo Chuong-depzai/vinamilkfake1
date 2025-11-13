@@ -10,6 +10,16 @@ class CartController
         $this->cartModel = new Cart();
     }
 
+    private function redirect($controller, $action = '')
+    {
+        $url = 'index.php?controller=' . $controller;
+        if ($action) {
+            $url .= '&action=' . $action;
+        }
+        header("Location: " . $url);
+        exit;
+    }
+
     public function view()
     {
         $cartItems = $this->cartModel->getItems();
@@ -26,8 +36,7 @@ class CartController
             $quantity = isset($_POST['quantity']) ? intval($_POST['quantity']) : 1;
             $this->cartModel->addItem($productId, $quantity);
         }
-        header("Location: /shop_vinamilk/index.php?controller=cart&action=view");
-        exit;
+        $this->redirect('cart', 'view');
     }
 
     public function update()
@@ -37,8 +46,7 @@ class CartController
             $quantity = intval($_POST['quantity']);
             $this->cartModel->updateQuantity($productId, $quantity);
         }
-        header("Location: /shop_vinamilk/index.php?controller=cart&action=view");
-        exit;
+        $this->redirect('cart', 'view');
     }
 
     public function remove()
@@ -47,15 +55,13 @@ class CartController
             $productId = intval($_GET['id']);
             $this->cartModel->removeItem($productId);
         }
-        header("Location: /shop_vinamilk/index.php?controller=cart&action=view");
-        exit;
+        $this->redirect('cart', 'view');
     }
 
     public function clear()
     {
         $this->cartModel->clear();
-        header("Location: /shop_vinamilk/index.php?controller=cart&action=view");
-        exit;
+        $this->redirect('cart', 'view');
     }
 
     public function checkout()
@@ -64,8 +70,7 @@ class CartController
         $total = $this->cartModel->getTotal();
 
         if (empty($cartItems)) {
-            header("Location: /shop_vinamilk/index.php?controller=cart&action=view");
-            exit;
+            $this->redirect('cart', 'view');
         }
 
         $this->cartModel->clear();
@@ -76,7 +81,7 @@ class CartController
         echo '<h2 class="checkout-success-title">Đặt hàng thành công!</h2>';
         echo '<p class="checkout-success-message">Cảm ơn bạn đã đặt hàng. Chúng tôi sẽ liên hệ với bạn sớm nhất.</p>';
         echo '<p class="checkout-success-total">Tổng tiền: ' . number_format($total, 0, ',', '.') . ' VNĐ</p>';
-        echo '<a href="/shop_vinamilk/" class="checkout-continue-btn">Tiếp tục mua sắm</a>';
+        echo '<a href="index.php" class="checkout-continue-btn">Tiếp tục mua sắm</a>';
         echo '</div>';
         echo '</div>';
         require_once __DIR__ . '/../views/footer.php';

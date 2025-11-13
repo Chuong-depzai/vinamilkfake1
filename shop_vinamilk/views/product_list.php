@@ -11,7 +11,7 @@
                 <div class="product-card">
                     <div class="product-image-wrapper">
                         <?php
-                        $imagePath = "/shop_vinamilk/uploads/" . htmlspecialchars($product['image']);
+                        $imagePath = "uploads/" . htmlspecialchars($product['image']);
                         if (file_exists(__DIR__ . '/../uploads/' . $product['image'])):
                         ?>
                             <img src="<?php echo $imagePath; ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" class="product-image">
@@ -36,7 +36,7 @@
                             ?>
                         </p>
 
-                        <a href="/shop_vinamilk/index.php?controller=product&action=show&id=<?php echo $product['id']; ?>" class="btn-primary">
+                        <a href="index.php?controller=product&action=show&id=<?php echo $product['id']; ?>" class="btn-primary">
                             Xem chi tiết
                         </a>
                     </div>

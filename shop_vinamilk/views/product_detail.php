@@ -2,7 +2,7 @@
     <div class="product-detail-container">
         <div class="product-detail-image-section">
             <?php
-            $imagePath = "/shop_vinamilk/uploads/" . htmlspecialchars($product['image']);
+            $imagePath = "uploads/" . htmlspecialchars($product['image']);
             if (file_exists(__DIR__ . '/../uploads/' . $product['image'])):
             ?>
                 <img src="<?php echo $imagePath; ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" class="product-detail-image">
@@ -44,7 +44,7 @@
                 </div>
             <?php endif; ?>
 
-            <form method="POST" action="/shop_vinamilk/index.php?controller=cart&action=add" class="add-to-cart-form">
+            <form method="POST" action="index.php?controller=cart&action=add" class="add-to-cart-form">
                 <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
                 <div class="quantity-selector">
                     <label for="quantity" class="quantity-label">Số lượng:</label>
@@ -53,7 +53,8 @@
                 <button type="submit" class="btn-add-to-cart">Thêm vào giỏ hàng</button>
             </form>
 
-            <a href="/shop_vinamilk/" class="btn-back">← Quay lại danh sách</a>
+            <a href="index.php" class="btn-back">← Quay lại danh sách</a>
+
         </div>
     </div>
 </div>
