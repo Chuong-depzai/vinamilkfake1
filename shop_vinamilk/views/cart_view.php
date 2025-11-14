@@ -45,7 +45,7 @@
                         </div>
 
                         <div class="cart-item-actions">
-                            <a href="/index.php?controller=cart&action=remove&id=<?php echo $item['id']; ?>"
+                            <a href="index.php?controller=cart&action=remove&id=<?php echo $item['id']; ?>"
                                 class="btn-remove-item"
                                 onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">
                                 Xóa
@@ -70,7 +70,7 @@
                     <span class="cart-total-value"><?php echo number_format($total, 0, ',', '.'); ?> VNĐ</span>
                 </div>
 
-                <form method="POST" action="/index.php?controller=cart&action=checkout" class="cart-checkout-form">
+                <form method="POST" action="index.php?controller=cart&action=checkout" class="cart-checkout-form">
                     <button type="submit" class="btn-checkout">Thanh toán</button>
                 </form>
 
@@ -83,5 +83,9 @@
                 </a>
             </div>
         </div>
+    <?php endif; ?>
+    <?php if (!isset($_SESSION['user_id'])): ?>
+        <p>Hãy đăng nhập để dùng giỏ hàng.</p>
+        <?php return; ?>
     <?php endif; ?>
 </div>

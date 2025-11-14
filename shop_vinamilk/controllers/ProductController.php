@@ -23,7 +23,7 @@ class ProductController
     {
         $product = $this->productModel->getById($id);
         if (!$product) {
-            header("Location: /index.php");
+            header("Location: index.php");
             exit;
         }
 
@@ -68,7 +68,7 @@ class ProductController
     {
         $product = $this->productModel->getById($id);
         if (!$product) {
-            header("Location: /index.php?controller=product&action=admin");
+            header("Location: index.php?controller=product&action=admin");
             exit;
         }
 
@@ -95,7 +95,7 @@ class ProductController
         }
 
         $this->productModel->delete($id);
-        header("Location: /index.php?controller=product&action=admin");
+        header("Location: index.php?controller=product&action=admin");
         exit;
     }
 

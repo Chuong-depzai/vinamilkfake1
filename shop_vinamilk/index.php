@@ -6,6 +6,7 @@ ini_set('display_errors', 1);
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/controllers/ProductController.php';
 require_once __DIR__ . '/controllers/CartController.php';
+require_once __DIR__ . '/controllers/AuthController.php'; // Thêm dòng này
 
 $controller = isset($_GET['controller']) ? $_GET['controller'] : 'product';
 $action = isset($_GET['action']) ? $_GET['action'] : 'index';
@@ -71,6 +72,31 @@ switch ($controller) {
                 break;
             default:
                 $cartController->view();
+                break;
+        }
+        break;
+
+    // THÊM PHẦN NÀY - Xử lý Auth (Đăng nhập/Đăng ký)
+    case 'auth':
+        $authController = new AuthController();
+        switch ($action) {
+            case 'showLogin':
+                $authController->showLogin();
+                break;
+            case 'login':
+                $authController->login();
+                break;
+            case 'showRegister':
+                $authController->showRegister();
+                break;
+            case 'register':
+                $authController->register();
+                break;
+            case 'logout':
+                $authController->logout();
+                break;
+            default:
+                $authController->showLogin();
                 break;
         }
         break;

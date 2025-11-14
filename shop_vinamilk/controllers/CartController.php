@@ -7,6 +7,7 @@ class CartController
 
     public function __construct()
     {
+        if (!isset($_SESSION)) session_start();
         $this->cartModel = new Cart();
     }
 
@@ -22,8 +23,21 @@ class CartController
 
     public function view()
     {
+        // ⛔ Nếu chưa đăng nhập → không load giỏ
+        if (!isset($_SESSION['user_id'])) {
+            $cartItems = [];
+            $total = 0;
+
+            require_once __DIR__ . '/../views/header.php';
+            echo '<p style="padding: 20px; text-align:center;">Hãy đăng nhập để dùng giỏ hàng.</p>';
+            require_once __DIR__ . '/../views/footer.php';
+            return;
+        }
+
+        // ✔ Nếu đã đăng nhập
         $cartItems = $this->cartModel->getItems();
         $total = $this->cartModel->getTotal();
+
         require_once __DIR__ . '/../views/header.php';
         require_once __DIR__ . '/../views/cart_view.php';
         require_once __DIR__ . '/../views/footer.php';
@@ -31,6 +45,11 @@ class CartController
 
     public function add()
     {
+        // ⛔ Chặn người chưa đăng nhập
+        if (!isset($_SESSION['user_id'])) {
+            $this->redirect('auth', 'login');
+        }
+
         if (isset($_POST['product_id'])) {
             $productId = intval($_POST['product_id']);
             $quantity = isset($_POST['quantity']) ? intval($_POST['quantity']) : 1;
@@ -41,6 +60,8 @@ class CartController
 
     public function update()
     {
+        if (!isset($_SESSION['user_id'])) $this->redirect('auth', 'login');
+
         if (isset($_POST['product_id']) && isset($_POST['quantity'])) {
             $productId = intval($_POST['product_id']);
             $quantity = intval($_POST['quantity']);
@@ -51,6 +72,8 @@ class CartController
 
     public function remove()
     {
+        if (!isset($_SESSION['user_id'])) $this->redirect('auth', 'login');
+
         if (isset($_GET['id'])) {
             $productId = intval($_GET['id']);
             $this->cartModel->removeItem($productId);
@@ -60,12 +83,16 @@ class CartController
 
     public function clear()
     {
+        if (!isset($_SESSION['user_id'])) $this->redirect('auth', 'login');
+
         $this->cartModel->clear();
         $this->redirect('cart', 'view');
     }
 
     public function checkout()
     {
+        if (!isset($_SESSION['user_id'])) $this->redirect('auth', 'login');
+
         $cartItems = $this->cartModel->getItems();
         $total = $this->cartModel->getTotal();
 

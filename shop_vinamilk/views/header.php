@@ -3,8 +3,13 @@ if (!isset($_SESSION)) {
     session_start();
 }
 require_once __DIR__ . '/../models/Cart.php';
+require_once __DIR__ . '/../controllers/AuthController.php';
+
 $cartModel = new Cart();
 $cartCount = $cartModel->getCount();
+
+$isLoggedIn = AuthController::isLoggedIn();
+$currentUser = AuthController::getCurrentUser();
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -29,17 +34,45 @@ $cartCount = $cartModel->getCount();
                     <a href="index.php" class="navbar-link">Danh mục sản phẩm</a>
                 </li>
                 <li class="navbar-item">
-                    <a href="index.php?controller=cart&action=view" class="navbar-link"></a>
-                    Giỏ hàng
-                    <?php if ($cartCount > 0): ?>
-                        <span class="cart-badge"><?php echo $cartCount; ?></span>
-                    <?php endif; ?>
+                    <a href="index.php?controller=cart&action=view" class="navbar-link">
+                        Giỏ hàng
+                        <?php if ($cartCount > 0): ?>
+                            <span class="cart-badge"><?php echo $cartCount; ?></span>
+                        <?php endif; ?>
                     </a>
                 </li>
                 <li class="navbar-item">
                     <a href="index.php?controller=product&action=admin" class="navbar-link">Quản lý sản phẩm</a>
                 </li>
+
+
+                <?php if ($isLoggedIn): ?>
+
+                    <li class="navbar-item user-menu">
+                        <div class="navbar-link user-name">
+                            👤 <?php echo htmlspecialchars($currentUser['name'] ?: $currentUser['phone']); ?>
+                        </div>
+
+                        <div class="user-dropdown">
+                            <a href="index.php?controller=auth&action=logout" class="dropdown-item">
+                                Đăng xuất
+                            </a>
+                        </div>
+                    </li>
+                <?php else: ?>
+                    <!-- Nếu chưa đăng nhập -->
+                    <li class="navbar-item">
+                        <a href="index.php?controller=auth&action=showLogin" class="navbar-link">Đăng nhập</a>
+                    </li>
+                    <li class="navbar-item">
+                        <a href="index.php?controller=auth&action=showRegister" class="navbar-link-register">Đăng ký</a>
+                    </li>
+                <?php endif; ?>
             </ul>
         </div>
     </nav>
     <main class="main-content">
+
+        <style>
+
+        </style>

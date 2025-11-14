@@ -27,3 +27,17 @@ INSERT INTO products (name, price, image, type, description, ingredients, packag
 ('Vinamilk Green Farm', 9500, 'green-farm.jpg', 'Sữa tươi', 'Sữa tươi tiệt trùng Green Farm từ trang trại bò sữa organic, không chất bảo quản, giàu dưỡng chất tự nhiên.', 'Sữa tươi organic 100%', 'Hộp'),
 ('Sữa Bột Dielac Alpha Gold', 485000, 'dielac-alpha-gold.jpg', 'Sữa bột người lớn', 'Sữa bột dinh dưỡng dành cho người lớn tuổi và người cần bổ sung dinh dưỡng, giàu protein, canxi và các vitamin thiết yếu.', 'Sữa bột, maltodextrin, đường, vitamin, khoáng chất', 'Hộp'),
 ('Sữa Chua Vinamilk Không Đường', 5000, 'sua-chua-khong-duong.jpg', 'Sữa chua', 'Sữa chua không đường với lợi khuẩn probiotic, giúp cải thiện hệ tiêu hóa, phù hợp cho người ăn kiêng và người tiểu đường.', 'Sữa tươi, men sữa chua', 'Hộp');
+-- Tạo bảng users để lưu thông tin đăng nhập
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  phone VARCHAR(15) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  full_name VARCHAR(100),
+  email VARCHAR(100),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Thêm 1 tài khoản test
+INSERT INTO users (phone, password, full_name, email) VALUES
+('0123456789', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Nguyễn Văn A', 'test@example.com');
+-- Password mặc định là: password123
