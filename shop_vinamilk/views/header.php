@@ -41,6 +41,9 @@ $currentUser = AuthController::getCurrentUser();
                         <?php endif; ?>
                     </a>
                 </li>
+                <li class="navbar-item">
+                    <a href="index.php?controller=store" class="navbar-link"> Cửa Hàng</a>
+                </li>
 
                 <?php if ($isLoggedIn): ?>
                     <!-- ✅ CHỈ HIỂN THỊ KHI ĐÃ ĐĂNG NHẬP -->

@@ -8,6 +8,7 @@ require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/controllers/ProductController.php';
 require_once __DIR__ . '/controllers/CartController.php';
 require_once __DIR__ . '/controllers/AuthController.php';
+require_once __DIR__ . '/controllers/StoreController.php'; // ✅ THÊM
 
 $controller = isset($_GET['controller']) ? $_GET['controller'] : 'product';
 $action = isset($_GET['action']) ? $_GET['action'] : 'index';
@@ -95,7 +96,6 @@ switch ($controller) {
             case 'logout':
                 $authController->logout();
                 break;
-            // === ROUTES MỚI: QUÊN MẬT KHẨU ===
             case 'showForgotPassword':
                 $authController->showForgotPassword();
                 break;
@@ -110,6 +110,19 @@ switch ($controller) {
                 break;
             default:
                 $authController->showLogin();
+                break;
+        }
+        break;
+
+    // ✅ THÊM CASE MỚI CHO STORE
+    case 'store':
+        $storeController = new StoreController();
+        switch ($action) {
+            case 'api':
+                $storeController->api();
+                break;
+            default:
+                $storeController->index();
                 break;
         }
         break;
