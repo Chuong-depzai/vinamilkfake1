@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -6,7 +7,7 @@ ini_set('display_errors', 1);
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/controllers/ProductController.php';
 require_once __DIR__ . '/controllers/CartController.php';
-require_once __DIR__ . '/controllers/AuthController.php'; // Thêm dòng này
+require_once __DIR__ . '/controllers/AuthController.php';
 
 $controller = isset($_GET['controller']) ? $_GET['controller'] : 'product';
 $action = isset($_GET['action']) ? $_GET['action'] : 'index';
@@ -76,7 +77,6 @@ switch ($controller) {
         }
         break;
 
-    // THÊM PHẦN NÀY - Xử lý Auth (Đăng nhập/Đăng ký)
     case 'auth':
         $authController = new AuthController();
         switch ($action) {
@@ -94,6 +94,19 @@ switch ($controller) {
                 break;
             case 'logout':
                 $authController->logout();
+                break;
+            // === ROUTES MỚI: QUÊN MẬT KHẨU ===
+            case 'showForgotPassword':
+                $authController->showForgotPassword();
+                break;
+            case 'sendResetCode':
+                $authController->sendResetCode();
+                break;
+            case 'showVerifyCode':
+                $authController->showVerifyCode();
+                break;
+            case 'resetPassword':
+                $authController->resetPassword();
                 break;
             default:
                 $authController->showLogin();

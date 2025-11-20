@@ -10,15 +10,12 @@ class User
         $this->db = getDB();
     }
 
-    // Đăng ký user mới
     public function register($phone, $password, $full_name = '', $email = '')
     {
-        // Kiểm tra số điện thoại đã tồn tại chưa
         if ($this->findByPhone($phone)) {
-            return false; // Số điện thoại đã được đăng ký
+            return false;
         }
 
-        // Mã hóa mật khẩu
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         $sql = "INSERT INTO users (phone, password, full_name, email) VALUES (?, ?, ?, ?)";
@@ -26,24 +23,21 @@ class User
         return $stmt->execute([$phone, $hashedPassword, $full_name, $email]);
     }
 
-    // Đăng nhập
     public function login($phone, $password)
     {
         $user = $this->findByPhone($phone);
 
         if (!$user) {
-            return false; // Không tìm thấy user
+            return false;
         }
 
-        // Kiểm tra mật khẩu
         if (password_verify($password, $user['password'])) {
-            return $user; // Đăng nhập thành công, trả về thông tin user
+            return $user;
         }
 
-        return false; // Sai mật khẩu
+        return false;
     }
 
-    // Tìm user theo số điện thoại
     public function findByPhone($phone)
     {
         $sql = "SELECT * FROM users WHERE phone = ?";
@@ -52,7 +46,15 @@ class User
         return $stmt->fetch();
     }
 
-    // Tìm user theo ID
+    // === METHOD MỚI ===
+    public function findByEmail($email)
+    {
+        $sql = "SELECT * FROM users WHERE email = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$email]);
+        return $stmt->fetch();
+    }
+
     public function findById($id)
     {
         $sql = "SELECT * FROM users WHERE id = ?";
@@ -61,7 +63,6 @@ class User
         return $stmt->fetch();
     }
 
-    // Cập nhật thông tin user
     public function update($id, $full_name, $email)
     {
         $sql = "UPDATE users SET full_name = ?, email = ? WHERE id = ?";
@@ -69,7 +70,6 @@ class User
         return $stmt->execute([$full_name, $email, $id]);
     }
 
-    // Đổi mật khẩu
     public function changePassword($id, $newPassword)
     {
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);

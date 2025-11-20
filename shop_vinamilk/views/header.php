@@ -17,7 +17,7 @@ $currentUser = AuthController::getCurrentUser();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vinamilk - Cửa hàng trực tuyến</title>
+    <title>Vinamilk </title>
     <style>
         <?php include __DIR__ . '/../css/style.css'; ?>
     </style>
@@ -41,12 +41,12 @@ $currentUser = AuthController::getCurrentUser();
                         <?php endif; ?>
                     </a>
                 </li>
-                <li class="navbar-item">
-                    <a href="index.php?controller=product&action=admin" class="navbar-link">Quản lý sản phẩm</a>
-                </li>
-
 
                 <?php if ($isLoggedIn): ?>
+                    <!-- ✅ CHỈ HIỂN THỊ KHI ĐÃ ĐĂNG NHẬP -->
+                    <li class="navbar-item">
+                        <a href="index.php?controller=product&action=admin" class="navbar-link">Quản lý sản phẩm</a>
+                    </li>
 
                     <li class="navbar-item user-menu">
                         <div class="navbar-link user-name">
@@ -72,7 +72,3 @@ $currentUser = AuthController::getCurrentUser();
         </div>
     </nav>
     <main class="main-content">
-
-        <style>
-
-        </style>
