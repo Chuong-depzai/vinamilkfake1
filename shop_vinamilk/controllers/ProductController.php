@@ -21,15 +21,30 @@ class ProductController
     // Trang chi tiết sản phẩm
     public function show($id)
     {
-        $product = $this->productModel->getById($id);
-        if (!$product) {
-            header("Location: index.php");
-            exit;
-        }
+    $product = $this->productModel->getById($id);
+    if (!$product) {
+        header("Location: index.php");
+        exit;
+    }
 
-        require_once __DIR__ . '/../views/header.php';
-        require_once __DIR__ . '/../views/product_detail.php';
-        require_once __DIR__ . '/../views/footer.php';
+    // ==============================================
+    // ✅ PHẦN BỔ SUNG ĐỂ HIỂN THỊ ĐÁNH GIÁ (REVIEW)
+    // ==============================================
+
+    // 1. Tải Review Model
+    require_once __DIR__ . '/../models/Review.php'; 
+    
+    // 2. Khởi tạo và lấy dữ liệu
+    $reviewModel = new Review();
+    $reviews = $reviewModel->getByProduct($id); 
+    $ratingInfo = $reviewModel->getAverageRating($id); 
+
+    // ==============================================
+
+    require_once __DIR__ . '/../views/header.php';
+    // Tại đây, các biến $product, $reviews, $ratingInfo sẽ được truyền sang product_detail.php
+    require_once __DIR__ . '/../views/product_detail.php'; 
+    require_once __DIR__ . '/../views/footer.php';
     }
 
     // Trang quản trị sản phẩm
