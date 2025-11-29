@@ -1468,6 +1468,7 @@ body {
     }
 }
 
+<<<<<<< HEAD
 .btn-wishlist {
     position: absolute;
     top: 10px;
@@ -1697,3 +1698,178 @@ body {
 .btn-add-to-wishlist.in-wishlist {
     background-color: #dc3545;
 }
+=======
+/* --- REVIEW & RATING STYLES --- */
+
+.product-detail-info-section {
+    /* Đảm bảo khu vực info linh hoạt */
+    display: flex;
+    flex-direction: column;
+}
+
+.product-reviews-container {
+    margin-top: 40px;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.section-title-large {
+    color: #0033a0;
+    font-size: 24px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+    font-weight: 700;
+}
+
+/* Rating Summary */
+.product-rating-summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.rating-stars-lg {
+    font-size: 24px;
+}
+
+.rating-stars-lg .star-filled {
+    color: #ffc107;
+    /* Màu vàng sao đã đánh */
+}
+
+.rating-stars-lg .star-empty {
+    color: #ccc;
+    /* Màu xám sao chưa đánh */
+}
+
+.rating-text {
+    font-size: 16px;
+    color: #666;
+}
+
+/* Review Form */
+.review-form-wrapper h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.review-form {
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-bottom: 30px;
+}
+
+.form-group-review {
+    margin-bottom: 15px;
+}
+
+.form-label-review {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #555;
+}
+
+.form-select-review,
+.form-textarea-review {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.form-textarea-review {
+    resize: vertical;
+}
+
+.btn-submit-review {
+    background-color: #ff6b00;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit-review:hover {
+    background-color: #e55a00;
+}
+
+.login-prompt-review {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    margin-bottom: 30px;
+}
+
+.login-prompt-review a {
+    color: #0033a0;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* Reviews List */
+.reviews-list h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.review-item {
+    padding: 15px 0;
+    border-bottom: 1px dashed #f0f0f0;
+}
+
+.review-item:last-child {
+    border-bottom: none;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.review-user-name {
+    color: #0033a0;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.review-stars .star-filled {
+    color: #ffc107;
+    font-size: 16px;
+}
+
+.review-stars .star-empty {
+    color: #ccc;
+    font-size: 16px;
+}
+
+.review-comment {
+    color: #333;
+    margin: 5px 0 8px 0;
+    white-space: pre-wrap;
+    /* Giữ định dạng xuống dòng */
+}
+
+.review-date {
+    color: #999;
+    font-size: 12px;
+}
+
+>>>>>>> 10918bfda5979f7cd083346f530b27099fcde805
