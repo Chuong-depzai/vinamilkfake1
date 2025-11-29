@@ -117,3 +117,19 @@ INSERT INTO stores (name, address, city, province, latitude, longitude, phone, o
 
 -- Nghệ An
 ('Vinamilk Nghệ An', 'Số 118 Đường Tuệ Tĩnh, P. Hà Huy Tập', 'Vinh', 'Nghệ An', 18.6792, 105.6811, '0238.3822.123', '8:00 - 20:00');
+USE vinamilk1;
+
+-- Tạo bảng wishlist
+CREATE TABLE IF NOT EXISTS wishlist (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  product_id INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY unique_wishlist (user_id, product_id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tạo index để tăng tốc truy vấn
+CREATE INDEX idx_user_id ON wishlist(user_id);
+CREATE INDEX idx_product_id ON wishlist(product_id);

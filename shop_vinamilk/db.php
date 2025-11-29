@@ -1,5 +1,7 @@
 <?php
 // Cấu hình kết nối database
+date_default_timezone_set('Asia/Ho_Chi_Minh');
+
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
@@ -23,6 +25,8 @@ class Database
                     PDO::ATTR_EMULATE_PREPARES => false
                 )
             );
+            // Đồng bộ timezone MySQL
+            $this->conn->exec("SET time_zone = '+07:00'");
         } catch (PDOException $e) {
             die("Lỗi kết nối database: " . $e->getMessage());
         }

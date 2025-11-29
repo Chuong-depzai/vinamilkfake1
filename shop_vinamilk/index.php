@@ -8,7 +8,8 @@ require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/controllers/ProductController.php';
 require_once __DIR__ . '/controllers/CartController.php';
 require_once __DIR__ . '/controllers/AuthController.php';
-require_once __DIR__ . '/controllers/StoreController.php'; // ✅ THÊM
+require_once __DIR__ . '/controllers/StoreController.php';
+require_once __DIR__ . '/controllers/WishlistController.php'; // ✅ THÊM
 
 $controller = isset($_GET['controller']) ? $_GET['controller'] : 'product';
 $action = isset($_GET['action']) ? $_GET['action'] : 'index';
@@ -114,7 +115,6 @@ switch ($controller) {
         }
         break;
 
-    // ✅ THÊM CASE MỚI CHO STORE
     case 'store':
         $storeController = new StoreController();
         switch ($action) {
@@ -123,6 +123,30 @@ switch ($controller) {
                 break;
             default:
                 $storeController->index();
+                break;
+        }
+        break;
+
+    case 'wishlist': // ✅ THÊM
+        $wishlistController = new WishlistController();
+        switch ($action) {
+            case 'add':
+                $wishlistController->add();
+                break;
+            case 'remove':
+                $wishlistController->remove();
+                break;
+            case 'toggle':
+                $wishlistController->toggle();
+                break;
+            case 'moveAllToCart':
+                $wishlistController->moveAllToCart();
+                break;
+            case 'getCount':
+                $wishlistController->getCount();
+                break;
+            default:
+                $wishlistController->index();
                 break;
         }
         break;

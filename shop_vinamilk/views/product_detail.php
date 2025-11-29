@@ -51,10 +51,61 @@
                     <input type="number" id="quantity" name="quantity" value="1" min="1" max="100" class="quantity-input">
                 </div>
                 <button type="submit" class="btn-add-to-cart">Thêm vào giỏ hàng</button>
+                <button type="button"
+                    class="btn-add-to-wishlist"
+                    onclick="toggleWishlist(<?php echo $product['id']; ?>)">
+                    ❤️ Thêm vào yêu thích
+                </button>
             </form>
 
             <a href="index.php" class="btn-back">← Quay lại danh sách</a>
 
         </div>
     </div>
+    <script>
+        async function toggleWishlist(productId) {
+            try {
+                const formData = new FormData();
+                formData.append('product_id', productId);
+
+                const response = await fetch('index.php?controller=wishlist&action=toggle', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(data.message);
+
+                    // Cập nhật nút
+                    const btn = event.target;
+                    if (data.action === 'added') {
+                        btn.textContent = '💔 Bỏ yêu thích';
+                        btn.classList.add('in-wishlist');
+                    } else {
+                        btn.textContent = '❤️ Thêm vào yêu thích';
+                        btn.classList.remove('in-wishlist');
+                    }
+
+                    // Cập nhật badge đếm wishlist (nếu có)
+                    const badge = document.getElementById('wishlist-count-badge');
+                    if (badge) {
+                        badge.textContent = data.count;
+                        badge.style.display = data.count > 0 ? 'inline' : 'none';
+                    }
+                } else {
+                    if (data.redirect) {
+                        alert(data.message);
+                        window.location.href = data.redirect;
+                    } else {
+                        alert(data.message || 'Có lỗi xảy ra');
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra khi thêm vào yêu thích');
+            }
+        }
+    </script>
 </div>
