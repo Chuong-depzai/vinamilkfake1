@@ -10,9 +10,14 @@ class Review
         $this->db = getDB();
     }
 
-    // Thêm bình luận mới
+    // Thêm bình luận mới với validation
     public function create($productId, $userId, $rating, $comment)
     {
+        // Validate input
+        if ($productId <= 0 || !$userId || $rating < 1 || $rating > 5) {
+            return false;
+        }
+
         $sql = "INSERT INTO reviews (product_id, user_id, rating, comment) VALUES (?, ?, ?, ?)";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$productId, $userId, $rating, $comment]);
@@ -21,14 +26,13 @@ class Review
     // Lấy danh sách bình luận theo sản phẩm
     public function getByProduct($productId)
     {
-        // Join với bảng users để lấy tên người bình luận
         $sql = "SELECT r.*, u.full_name 
             FROM reviews r 
             JOIN users u ON r.user_id = u.id 
             WHERE r.product_id = ? 
-            ORDER BY r.created_at DESC"; // Đảm bảo ORDER BY DESC để xem review mới nhất
+            ORDER BY r.created_at DESC";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([$productId]);   
+        $stmt->execute([$productId]);
         return $stmt->fetchAll();
     }
 

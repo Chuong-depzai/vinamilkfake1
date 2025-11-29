@@ -9,9 +9,7 @@ require_once __DIR__ . '/controllers/CartController.php';
 require_once __DIR__ . '/controllers/AuthController.php';
 require_once __DIR__ . '/controllers/StoreController.php';
 
-// ===== MERGE HOÀN CHỈNH =====
-// Giữ cả WishlistController (bạn thêm)
-// Và giữ ReviewController (branch trên GitHub)
+
 require_once __DIR__ . '/controllers/WishlistController.php';
 require_once __DIR__ . '/controllers/ReviewController.php';
 // ============================
@@ -124,6 +122,7 @@ switch ($controller) {
         }
         break;
 
+
     case 'wishlist':
         $wishlistController = new WishlistController();
         switch ($action) {
@@ -144,6 +143,17 @@ switch ($controller) {
                 break;
             default:
                 $wishlistController->index();
+                break;
+        }
+        break;
+    case 'review':
+        $reviewController = new ReviewController();
+        switch ($action) {
+            case 'create':
+                $reviewController->create();
+                break;
+            default:
+                header("Location: index.php");
                 break;
         }
         break;

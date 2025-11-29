@@ -6,7 +6,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Hàm hiển thị sao
-function display_stars($rating) {
+function display_stars($rating)
+{
     $output = '';
     $rating = round($rating);
     for ($i = 1; $i <= 5; $i++) {
@@ -18,6 +19,16 @@ function display_stars($rating) {
 // Tính điểm trung bình và tổng số đánh giá
 $averageRating = $ratingInfo['avg_rating'] ?? 0;
 $totalReviews = $ratingInfo['total'] ?? 0;
+?>
+<?php
+// Debug - kiểm tra dữ liệu
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+echo "<!-- DEBUG INFO -->";
+echo "<!-- Product ID: " . ($product['id'] ?? 'NULL') . " -->";
+echo "<!-- Reviews count: " . count($reviews ?? []) . " -->";
+echo "<!-- Rating info: " . print_r($ratingInfo ?? [], true) . " -->";
 ?>
 
 <div class="page-container">
@@ -39,62 +50,62 @@ $totalReviews = $ratingInfo['total'] ?? 0;
             <h1 class="product-detail-name"><?php echo htmlspecialchars($product['name'] ?? ''); ?></h1>
 
             <div class="product-detail-price-box">
-                <span class="product-detail-price"><?php echo number_format($product['price'] ?? 0, 0, ',', '.'); ?> VNĐ</span>
+            <span class="product-detail-price"><?php echo number_format($product['price'] ?? 0, 0, ',', '.'); ?> VNĐ</span>
             </div>
-            
+
             <div class="product-rating-summary" style="margin-bottom: 20px;">
-                <span class="rating-stars-lg">
-                    <?php echo display_stars($averageRating); ?>
-                </span>
-                <span class="rating-text">
-                    (<?php echo number_format($averageRating, 1); ?>/5 sao từ <?php echo $totalReviews; ?> đánh giá)
-                </span>
+            <span class="rating-stars-lg">
+                <?php echo display_stars($averageRating); ?>
+            </span>
+            <span class="rating-text">
+                (<?php echo number_format($averageRating, 1); ?>/5 sao từ <?php echo $totalReviews; ?> đánh giá)
+            </span>
             </div>
             <div class="product-detail-meta">
-                <div class="product-meta-item">
-                    <span class="product-meta-label">Loại sản phẩm:</span>
-                    <span class="product-meta-value"><?php echo htmlspecialchars($product['type'] ?? ''); ?></span>
-                </div>
-                <div class="product-meta-item">
-                    <span class="product-meta-label">Quy cách đóng gói:</span>
-                    <span class="product-meta-value"><?php echo htmlspecialchars($product['packaging'] ?? ''); ?></span>
-                </div>
+            <div class="product-meta-item">
+                <span class="product-meta-label">Loại sản phẩm:</span>
+                <span class="product-meta-value"><?php echo htmlspecialchars($product['type'] ?? ''); ?></span>
+            </div>
+            <div class="product-meta-item">
+                <span class="product-meta-label">Quy cách đóng gói:</span>
+                <span class="product-meta-value"><?php echo htmlspecialchars($product['packaging'] ?? ''); ?></span>
+            </div>
             </div>
 
             <div class="product-detail-description">
-                <h3 class="section-title">Mô tả sản phẩm</h3>
-                <p><?php echo nl2br(htmlspecialchars($product['description'] ?? '')); ?></p>
+            <h3 class="section-title">Mô tả sản phẩm</h3>
+            <p><?php echo nl2br(htmlspecialchars($product['description'] ?? '')); ?></p>
             </div>
 
             <div class="product-detail-ingredients">
-                <h3 class="section-title">Thành phần</h3>
-                <p><?php echo nl2br(htmlspecialchars($product['ingredients'] ?? '')); ?></p>
+            <h3 class="section-title">Thành phần</h3>
+            <p><?php echo nl2br(htmlspecialchars($product['ingredients'] ?? '')); ?></p>
             </div>
-
-<<<<<<< HEAD
-            <form method="POST" action="index.php?controller=cart&action=add" class="add-to-cart-form">
-                <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-                <div class="quantity-selector">
-                    <label for="quantity" class="quantity-label">Số lượng:</label>
-                    <input type="number" id="quantity" name="quantity" value="1" min="1" max="100" class="quantity-input">
-                </div>
-                <button type="submit" class="btn-add-to-cart">Thêm vào giỏ hàng</button>
-                <button type="button"
-                    class="btn-add-to-wishlist"
-                    onclick="toggleWishlist(<?php echo $product['id']; ?>)">
-                    ❤️ Thêm vào yêu thích
-=======
+            
             <form action="index.php?controller=cart&action=add" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="id" value="<?php echo $product['id']; ?>">
-                <button type="submit" class="btn-add-to-cart">
-                    🛒 Thêm vào Giỏ hàng
->>>>>>> 10918bfda5979f7cd083346f530b27099fcde805
-                </button>
+            <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit" class="btn-add-to-cart">
+                🛒 Thêm vào Giỏ hàng
+            </button>
             </form>
-            </div>
+
+            <?php 
+            $inWishlist = false;
+            if (isset($_SESSION['user_id'])) {
+                require_once __DIR__ . '/../models/Wishlist.php';
+                $wishlist = new Wishlist();
+                $inWishlist = $wishlist->isInWishlist($_SESSION['user_id'], $product['id']);
+            }
+            ?>
+            
+            <button class="btn-wishlist <?php echo $inWishlist ? 'in-wishlist' : ''; ?>" 
+                onclick="toggleWishlist(<?php echo $product['id']; ?>)">
+            <?php echo $inWishlist ? '💔 Bỏ yêu thích' : '❤️ Thêm vào yêu thích'; ?>
+            </button>
+        </div>
     </div>
-    
-    
+
     <div class="product-reviews-container">
         <h2 class="section-title-large">Đánh giá & Bình luận</h2>
 
@@ -103,7 +114,7 @@ $totalReviews = $ratingInfo['total'] ?? 0;
                 <h3>Gửi đánh giá của bạn</h3>
                 <form action="index.php?controller=review&action=create" method="POST" class="review-form">
                     <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-                    
+
                     <div class="form-group-review">
                         <label for="rating" class="form-label-review">Chọn số sao:</label>
                         <select name="rating" id="rating" class="form-select-review" required>
@@ -148,60 +159,51 @@ $totalReviews = $ratingInfo['total'] ?? 0;
             <?php endif; ?>
         </div>
     </div>
-<<<<<<< HEAD
-    <script>
-        async function toggleWishlist(productId) {
-            try {
-                const formData = new FormData();
-                formData.append('product_id', productId);
-
-                const response = await fetch('index.php?controller=wishlist&action=toggle', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    alert(data.message);
-
-                    // Cập nhật nút
-                    const btn = event.target;
-                    if (data.action === 'added') {
-                        btn.textContent = '💔 Bỏ yêu thích';
-                        btn.classList.add('in-wishlist');
-                    } else {
-                        btn.textContent = '❤️ Thêm vào yêu thích';
-                        btn.classList.remove('in-wishlist');
-                    }
-
-                    // Cập nhật badge đếm wishlist (nếu có)
-                    const badge = document.getElementById('wishlist-count-badge');
-                    if (badge) {
-                        badge.textContent = data.count;
-                        badge.style.display = data.count > 0 ? 'inline' : 'none';
-                    }
-                } else {
-                    if (data.redirect) {
-                        alert(data.message);
-                        window.location.href = data.redirect;
-                    } else {
-                        alert(data.message || 'Có lỗi xảy ra');
-                    }
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Có lỗi xảy ra khi thêm vào yêu thích');
-            }
-        }
-    </script>
 </div>
-=======
-    </div>
 
 <script>
-    // Xóa code JS lỗi cũ (nếu có)
-    // Nếu bạn không dùng jQuery trong dự án, bạn có thể xóa toàn bộ thẻ <script> này.
-    // Nếu bạn có dùng jQuery cho các mục đích khác, chỉ cần xóa nội dung hàm loadReviews và các hàm xử lý form liên quan đến review.
+    async function toggleWishlist(productId) {
+        try {
+            const formData = new FormData();
+            formData.append('product_id', productId);
+
+            const response = await fetch('index.php?controller=wishlist&action=toggle', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                alert(data.message);
+
+                // Cập nhật nút
+                const btn = event.target;
+                if (data.action === 'added') {
+                    btn.textContent = '💔 Bỏ yêu thích';
+                    btn.classList.add('in-wishlist');
+                } else {
+                    btn.textContent = '❤️ Thêm vào yêu thích';
+                    btn.classList.remove('in-wishlist');
+                }
+
+                // Cập nhật badge đếm wishlist (nếu có)
+                const badge = document.getElementById('wishlist-count-badge');
+                if (badge) {
+                    badge.textContent = data.count;
+                    badge.style.display = data.count > 0 ? 'inline' : 'none';
+                }
+            } else {
+                if (data.redirect) {
+                    alert(data.message);
+                    window.location.href = data.redirect;
+                } else {
+                    alert(data.message || 'Có lỗi xảy ra');
+                }
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Có lỗi xảy ra khi thêm vào yêu thích');
+        }
+    }
 </script>
->>>>>>> 10918bfda5979f7cd083346f530b27099fcde805
