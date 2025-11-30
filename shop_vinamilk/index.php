@@ -157,6 +157,57 @@ switch ($controller) {
                 break;
         }
         break;
+    case 'order':
+        require_once __DIR__ . '/controllers/OrderController.php';
+        $orderController = new OrderController();
+        switch ($action) {
+            case 'history':
+                $orderController->history();
+                break;
+            case 'detail':
+                $orderController->detail();
+                break;
+            case 'cancel':
+                $orderController->cancel();
+                break;
+            default:
+                $orderController->history();
+                break;
+        }
+        break;
+    case 'product':
+        $productController = new ProductController();
+        switch ($action) {
+            case 'productList': // Danh sách sản phẩm
+                $productController->productList();
+                break;
+            case 'show': // Chi tiết sản phẩm
+                if ($id) $productController->show($id);
+                else $productController->index();
+                break;
+            case 'search': // Tìm kiếm
+                $productController->search();
+                break;
+            case 'admin': // Quản trị
+                $productController->admin();
+                break;
+            case 'create': // Thêm mới
+                $productController->create();
+                break;
+            case 'edit': // Sửa
+                if ($id) $productController->edit($id);
+                else $productController->admin();
+                break;
+            case 'delete': // Xóa
+                if ($id) $productController->delete($id);
+                else $productController->admin();
+                break;
+            default: // Trang chủ
+                $productController->index();
+                break;
+        }
+        break;
+
 
     default:
         $productController = new ProductController();

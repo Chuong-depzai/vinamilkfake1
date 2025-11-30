@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/Product.php';
+
 class ProductController
 {
     private $productModel;
@@ -9,8 +10,21 @@ class ProductController
         $this->productModel = new Product();
     }
 
-    // Trang hiển thị danh sách sản phẩm
+    // ========================================
+    // TRANG CHỦ MỚI (Home page)
+    // ========================================
     public function index()
+    {
+        $products = $this->productModel->getAll();
+        require_once __DIR__ . '/../views/header.php';
+        require_once __DIR__ . '/../views/home.php';
+        require_once __DIR__ . '/../views/footer.php';
+    }
+
+    // ========================================
+    // DANH SÁCH SẢN PHẨM (Product list)
+    // ========================================
+    public function productList()
     {
         $products = $this->productModel->getAll();
         require_once __DIR__ . '/../views/header.php';
@@ -18,36 +32,65 @@ class ProductController
         require_once __DIR__ . '/../views/footer.php';
     }
 
-    // Trang chi tiết sản phẩm
+    // ========================================
+    // CHI TIẾT SẢN PHẨM (Product detail)
+    // ========================================
     public function show($id)
     {
-    $product = $this->productModel->getById($id);
-    if (!$product) {
-        header("Location: index.php");
-        exit;
+        $product = $this->productModel->getById($id);
+        if (!$product) {
+            header("Location: index.php");
+            exit;
+        }
+
+        // Tải Review Model
+        require_once __DIR__ . '/../models/Review.php';
+        $reviewModel = new Review();
+        $reviews = $reviewModel->getByProduct($id);
+        $ratingInfo = $reviewModel->getAverageRating($id);
+
+        // Hiển thị nút wishlist
+        $showWishlist = true;
+
+        require_once __DIR__ . '/../views/header.php';
+        require_once __DIR__ . '/../views/product_detail.php';
+        require_once __DIR__ . '/../views/footer.php';
     }
 
-    // ==============================================
-    // ✅ PHẦN BỔ SUNG ĐỂ HIỂN THỊ ĐÁNH GIÁ (REVIEW)
-    // ==============================================
+    // ========================================
+    // TÌM KIẾM SẢN PHẨM
+    // ========================================
+    public function search()
+    {
+        $keyword = $_GET['keyword'] ?? '';
 
-    // 1. Tải Review Model
-    require_once __DIR__ . '/../models/Review.php'; 
-    
-    // 2. Khởi tạo và lấy dữ liệu
-    $reviewModel = new Review();
-    $reviews = $reviewModel->getByProduct($id); 
-    $ratingInfo = $reviewModel->getAverageRating($id); 
+        if (empty($keyword)) {
+            header("Location: index.php?controller=product&action=productList");
+            exit;
+        }
 
-    // ==============================================
+        $products = $this->productModel->search($keyword);
 
-    require_once __DIR__ . '/../views/header.php';
-    // Tại đây, các biến $product, $reviews, $ratingInfo sẽ được truyền sang product_detail.php
-    require_once __DIR__ . '/../views/product_detail.php'; 
-    require_once __DIR__ . '/../views/footer.php';
+        require_once __DIR__ . '/../views/header.php';
+        echo '<div class="page-container">';
+        echo '<h1 class="page-title">Kết quả tìm kiếm: "' . htmlspecialchars($keyword) . '"</h1>';
+
+        if (empty($products)) {
+            echo '<div class="empty-state">';
+            echo '<p class="empty-state-text">Không tìm thấy sản phẩm nào phù hợp</p>';
+            echo '<a href="index.php" class="btn-primary">Quay về trang chủ</a>';
+            echo '</div>';
+        } else {
+            require_once __DIR__ . '/../views/product_list.php';
+        }
+
+        echo '</div>';
+        require_once __DIR__ . '/../views/footer.php';
     }
 
-    // Trang quản trị sản phẩm
+    // ========================================
+    // QUẢN TRỊ SẢN PHẨM
+    // ========================================
     public function admin()
     {
         $products = $this->productModel->getAll();
@@ -56,21 +99,20 @@ class ProductController
         require_once __DIR__ . '/../views/footer.php';
     }
 
-    // Trang thêm sản phẩm mới
+    // ========================================
+    // THÊM SẢN PHẨM MỚI
+    // ========================================
     public function create()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Debug - kiểm tra dữ liệu POST và FILES
-            error_log("POST data: " . print_r($_POST, true));
-            error_log("FILES data: " . print_r($_FILES, true));
-
             $data = $this->handleUpload();
             if ($data) {
                 $this->productModel->create($data);
+                $_SESSION['success_message'] = 'Thêm sản phẩm thành công!';
                 header("Location: index.php?controller=product&action=admin");
                 exit;
             } else {
-                echo "<div style='background:red;color:white;padding:20px;'>Lỗi khi upload! Kiểm tra console để xem chi tiết.</div>";
+                $_SESSION['error_message'] = 'Lỗi khi upload ảnh!';
             }
         }
 
@@ -78,7 +120,10 @@ class ProductController
         require_once __DIR__ . '/../views/product_form.php';
         require_once __DIR__ . '/../views/footer.php';
     }
-    // Trang sửa sản phẩm
+
+    // ========================================
+    // SỬA SẢN PHẨM
+    // ========================================
     public function edit($id)
     {
         $product = $this->productModel->getById($id);
@@ -91,7 +136,8 @@ class ProductController
             $data = $this->handleUpload($product['image']);
             if ($data) {
                 $this->productModel->update($id, $data);
-                header("Location: /index.php?controller=product&action=admin");
+                $_SESSION['success_message'] = 'Cập nhật sản phẩm thành công!';
+                header("Location: index.php?controller=product&action=admin");
                 exit;
             }
         }
@@ -101,7 +147,9 @@ class ProductController
         require_once __DIR__ . '/../views/footer.php';
     }
 
-    // Xóa sản phẩm
+    // ========================================
+    // XÓA SẢN PHẨM
+    // ========================================
     public function delete($id)
     {
         $product = $this->productModel->getById($id);
@@ -110,11 +158,14 @@ class ProductController
         }
 
         $this->productModel->delete($id);
+        $_SESSION['success_message'] = 'Xóa sản phẩm thành công!';
         header("Location: index.php?controller=product&action=admin");
         exit;
     }
 
-    // Xử lý upload ảnh
+    // ========================================
+    // XỬ LÝ UPLOAD ẢNH
+    // ========================================
     private function handleUpload($oldImage = null)
     {
         $data = [
@@ -129,20 +180,19 @@ class ProductController
 
         // Kiểm tra nếu có upload ảnh
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            // Đường dẫn tuyệt đối đến thư mục uploads
             $uploadDir = __DIR__ . '/../uploads/';
 
             // Tạo thư mục nếu chưa tồn tại
             if (!file_exists($uploadDir)) {
                 if (!mkdir($uploadDir, 0777, true)) {
-                    echo "Lỗi: Không thể tạo thư mục uploads!";
+                    error_log("Lỗi: Không thể tạo thư mục uploads!");
                     return false;
                 }
             }
 
             // Kiểm tra quyền ghi
             if (!is_writable($uploadDir)) {
-                echo "Lỗi: Thư mục uploads không có quyền ghi!";
+                error_log("Lỗi: Thư mục uploads không có quyền ghi!");
                 return false;
             }
 
@@ -156,13 +206,13 @@ class ProductController
             $fileType = $_FILES['image']['type'];
 
             if (!in_array($fileType, $allowedTypes)) {
-                echo "Lỗi: Chỉ chấp nhận file JPG, PNG, GIF!";
+                error_log("Lỗi: Chỉ chấp nhận file JPG, PNG, GIF!");
                 return false;
             }
 
             // Kiểm tra kích thước file (max 5MB)
             if ($_FILES['image']['size'] > 5 * 1024 * 1024) {
-                echo "Lỗi: File không được vượt quá 5MB!";
+                error_log("Lỗi: File không được vượt quá 5MB!");
                 return false;
             }
 
@@ -174,7 +224,7 @@ class ProductController
                 }
                 $data['image'] = $fileName;
             } else {
-                echo "Lỗi: Không thể upload file! Error code: " . $_FILES['image']['error'];
+                error_log("Lỗi: Không thể upload file! Error code: " . $_FILES['image']['error']);
                 return false;
             }
         }
