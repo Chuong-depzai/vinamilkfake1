@@ -436,10 +436,20 @@
 
         document.getElementById('storeCount').textContent = 'Đang xác định vị trí...';
 
+        // Options để có vị trí chính xác hơn
+        const options = {
+            enableHighAccuracy: true, // Sử dụng GPS để có vị trí chính xác
+            timeout: 10000, // Timeout sau 10 giây
+            maximumAge: 0 // Không sử dụng cache, lấy vị trí mới
+        };
+
         navigator.geolocation.getCurrentPosition(
             async (position) => {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
+                    const accuracy = position.coords.accuracy;
+
+                    console.log('Vị trí của bạn:', lat, lng, 'Độ chính xác:', accuracy, 'mét');
 
                     currentUserLocation = [lat, lng];
 
@@ -455,7 +465,19 @@
                             iconAnchor: [16, 42],
                             popupAnchor: [0, -42]
                         })
-                    }).addTo(map).bindPopup('📍 Vị trí của bạn').openPopup();
+                    }).addTo(map).bindPopup(`📍 Vị trí của bạn<br><small>Độ chính xác: ${Math.round(accuracy)}m</small>`).openPopup();
+
+                    // Thêm vòng tròn hiển thị độ chính xác
+                    if (window.accuracyCircle) {
+                        map.removeLayer(window.accuracyCircle);
+                    }
+                    window.accuracyCircle = L.circle([lat, lng], {
+                        radius: accuracy,
+                        color: '#ff6b00',
+                        fillColor: '#ff6b00',
+                        fillOpacity: 0.1,
+                        weight: 1
+                    }).addTo(map);
 
                     map.setView([lat, lng], 13);
 
@@ -471,13 +493,31 @@
 
                     } catch (error) {
                         console.error('Lỗi khi tìm cửa hàng gần:', error);
+                        alert('Lỗi khi tìm cửa hàng gần vị trí của bạn!');
                     }
                 },
                 (error) => {
                     console.error('Lỗi định vị:', error);
-                    alert('Không thể xác định vị trí của bạn. Vui lòng bật GPS và thử lại!');
+                    let errorMsg = 'Không thể xác định vị trí của bạn. ';
+
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMsg += 'Bạn đã từ chối quyền truy cập vị trí. Vui lòng cho phép trong cài đặt trình duyệt.';
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMsg += 'Thông tin vị trí không khả dụng. Vui lòng bật GPS/Wi-Fi.';
+                            break;
+                        case error.TIMEOUT:
+                            errorMsg += 'Yêu cầu định vị hết thời gian. Vui lòng thử lại.';
+                            break;
+                        default:
+                            errorMsg += 'Vui lòng bật GPS và thử lại!';
+                    }
+
+                    alert(errorMsg);
                     document.getElementById('storeCount').textContent = 'Không thể xác định vị trí';
-                }
+                },
+                options // Thêm options vào đây
         );
     }
 

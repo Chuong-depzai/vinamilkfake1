@@ -8,11 +8,8 @@ require_once __DIR__ . '/controllers/ProductController.php';
 require_once __DIR__ . '/controllers/CartController.php';
 require_once __DIR__ . '/controllers/AuthController.php';
 require_once __DIR__ . '/controllers/StoreController.php';
-
-
 require_once __DIR__ . '/controllers/WishlistController.php';
 require_once __DIR__ . '/controllers/ReviewController.php';
-// ============================
 
 $controller = isset($_GET['controller']) ? $_GET['controller'] : 'product';
 $action = isset($_GET['action']) ? $_GET['action'] : 'index';
@@ -20,33 +17,45 @@ $id = isset($_GET['id']) ? intval($_GET['id']) : null;
 
 switch ($controller) {
 
+    // ========================================
+    // PRODUCT CONTROLLER (ĐÃ GỘP 2 CASE)
+    // ========================================
     case 'product':
         $productController = new ProductController();
         switch ($action) {
-            case 'show':
+            case 'productList': // Danh sách sản phẩm
+                $productController->productList();
+                break;
+            case 'show': // Chi tiết sản phẩm
                 if ($id) $productController->show($id);
                 else $productController->index();
                 break;
-            case 'admin':
+            case 'search': // Tìm kiếm
+                $productController->search();
+                break;
+            case 'admin': // Quản trị
                 $productController->admin();
                 break;
-            case 'create':
+            case 'create': // Thêm mới
                 $productController->create();
                 break;
-            case 'edit':
+            case 'edit': // Sửa
                 if ($id) $productController->edit($id);
                 else $productController->admin();
                 break;
-            case 'delete':
+            case 'delete': // Xóa
                 if ($id) $productController->delete($id);
                 else $productController->admin();
                 break;
-            default:
+            default: // Trang chủ
                 $productController->index();
                 break;
         }
         break;
 
+    // ========================================
+    // CART CONTROLLER
+    // ========================================
     case 'cart':
         $cartController = new CartController();
         switch ($action) {
@@ -74,6 +83,9 @@ switch ($controller) {
         }
         break;
 
+    // ========================================
+    // AUTH CONTROLLER
+    // ========================================
     case 'auth':
         $authController = new AuthController();
         switch ($action) {
@@ -110,6 +122,9 @@ switch ($controller) {
         }
         break;
 
+    // ========================================
+    // STORE CONTROLLER
+    // ========================================
     case 'store':
         $storeController = new StoreController();
         switch ($action) {
@@ -122,7 +137,9 @@ switch ($controller) {
         }
         break;
 
-
+    // ========================================
+    // WISHLIST CONTROLLER
+    // ========================================
     case 'wishlist':
         $wishlistController = new WishlistController();
         switch ($action) {
@@ -146,6 +163,10 @@ switch ($controller) {
                 break;
         }
         break;
+
+    // ========================================
+    // REVIEW CONTROLLER
+    // ========================================
     case 'review':
         $reviewController = new ReviewController();
         switch ($action) {
@@ -157,6 +178,10 @@ switch ($controller) {
                 break;
         }
         break;
+
+    // ========================================
+    // ORDER CONTROLLER
+    // ========================================
     case 'order':
         require_once __DIR__ . '/controllers/OrderController.php';
         $orderController = new OrderController();
@@ -175,40 +200,33 @@ switch ($controller) {
                 break;
         }
         break;
-    case 'product':
-        $productController = new ProductController();
+
+    // ========================================
+    // CHAT CONTROLLER (MỚI THÊM)
+    // ========================================
+    case 'chat':
+        require_once __DIR__ . '/controllers/ChatController.php';
+        $chatController = new ChatController();
+
         switch ($action) {
-            case 'productList': // Danh sách sản phẩm
-                $productController->productList();
+            case 'send':
+                $chatController->send();
                 break;
-            case 'show': // Chi tiết sản phẩm
-                if ($id) $productController->show($id);
-                else $productController->index();
+            case 'history':
+                $chatController->history();
                 break;
-            case 'search': // Tìm kiếm
-                $productController->search();
+            case 'clearHistory':
+                $chatController->clearHistory();
                 break;
-            case 'admin': // Quản trị
-                $productController->admin();
-                break;
-            case 'create': // Thêm mới
-                $productController->create();
-                break;
-            case 'edit': // Sửa
-                if ($id) $productController->edit($id);
-                else $productController->admin();
-                break;
-            case 'delete': // Xóa
-                if ($id) $productController->delete($id);
-                else $productController->admin();
-                break;
-            default: // Trang chủ
-                $productController->index();
+            default:
+                header("Location: index.php");
                 break;
         }
         break;
 
-
+    // ========================================
+    // DEFAULT - TRANG CHỦ
+    // ========================================
     default:
         $productController = new ProductController();
         $productController->index();

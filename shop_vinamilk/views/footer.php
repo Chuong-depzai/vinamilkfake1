@@ -30,6 +30,12 @@
         <p class="footer-copyright">&copy; 2025 Vinamilk. Tất cả quyền được bảo lưu.</p>
     </div>
 </footer>
+
+<?php
+// THÊM CHATBOX WIDGET
+require_once __DIR__ . '/chatbox_widget.php';
+?>
+
 </body>
 
 </html>
